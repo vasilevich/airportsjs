@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+var download = require('../download');
+
+download()
+  .then(function() {
+    process.exit(0)
+  })
+  .catch(function(err) {
+    console.log(err)
+    process.exit(1)
+  })
