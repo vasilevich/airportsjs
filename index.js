@@ -6,38 +6,14 @@ airports = _.indexBy(airports, function(a) {
   return a.iata;
 });
 
-module.exports.lookupByIataCode = function(iataCode, cb) {
-
-  var q = Promise.resolve()
-    .then(function() {
-      return airports[iataCode]
-    })
-
-  if (cb) {
-    q.nodeify(cb)
-  } else {
-    return q
-  }
-
+module.exports.lookupByIataCode = function(iataCode) {
+  return airports[iataCode]
 }
 
-module.exports.searchByAirportName = function(name, cb) {
-
-  name = name.toLowerCase()
-
-  var q = Promise.resolve()
-    .then(function() {
-      return _.chain(airports)
-        .filter(function(v) {
-          return v.name.toLowerCase().indexOf(name) > -1
-        })
-        .value()
+module.exports.searchByAirportName = function(name) {
+  return _.chain(airports)
+    .filter(function(v) {
+      return v.name.toLowerCase().indexOf(name.toLowerCase()) > -1
     })
-
-  if (cb) {
-    q.nodeify(cb)
-  } else {
-    return q
-  }
-
+    .value()
 }
