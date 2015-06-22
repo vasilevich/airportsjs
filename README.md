@@ -12,8 +12,6 @@ npm install airportsjs --save
 
 ## Usage
 
-You can also use the following functions without a callback to get a Promisified version of it.
-
 ```
 index.lookupByIataCode('EWR', cb)
 
