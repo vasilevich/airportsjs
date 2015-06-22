@@ -5,7 +5,7 @@ A library to help you search and obtain airport codes.
 ## Install
 
 ```
-npm install airpotsjs --save
+npm install airportsjs --save
 ```
 
 ## Usage
