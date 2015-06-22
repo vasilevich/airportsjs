@@ -14,9 +14,7 @@ You can also use the following functions without a callback to get a Promisified
 
 ```
 index.lookupByIataCode('EWR', cb)
-```
 
-```
 { name: 'Newark Liberty Intl',
   city: 'Newark',
   country: 'United States',
@@ -27,9 +25,7 @@ index.lookupByIataCode('EWR', cb)
 
 ```
 index.searchByAirportName('Newark')
-```
 
-```
 [ { name: 'Newark Liberty Intl',
     city: 'Newark',
     country: 'United States',
