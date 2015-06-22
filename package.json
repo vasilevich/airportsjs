@@ -1,6 +1,6 @@
 {
   "name": "airportsjs",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A library to help search for airports and their codes",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:sjlu/airport-codes.git"
+    "url": "https://github.com/sjlu/airportsjs.git"
   },
   "keywords": [
     "airport",
