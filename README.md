@@ -13,7 +13,7 @@ npm install airportsjs --save
 ## Usage
 
 ```
-index.lookupByIataCode('EWR', cb)
+index.lookupByIataCode('EWR')
 
 { name: 'Newark Liberty Intl',
   city: 'Newark',
