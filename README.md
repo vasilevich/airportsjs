@@ -1,5 +1,7 @@
 # airportsjs
 
+[![Circle CI](https://circleci.com/gh/sjlu/airportsjs.svg?style=svg)](https://circleci.com/gh/sjlu/airportsjs)
+
 A library to help you search and obtain airport codes.
 
 ## Install
