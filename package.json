@@ -1,5 +1,5 @@
 {
-  "name": "airport-codes",
+  "name": "airportsjs",
   "version": "0.1.0",
   "description": "A library to help search for airports and their codes",
   "main": "index.js",
