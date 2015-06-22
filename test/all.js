@@ -15,7 +15,7 @@ describe('all', function() {
       .then(function(row) {
         expect(row.iata).to.equal('EWR');
         expect(row.city).to.equal('Newark');
-        expect(row.name).to.equal('Newark Liberty Intl');
+        expect(row.name).to.equal('Newark Liberty Intl (EWR)');
       })
   })
 
