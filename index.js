@@ -1,5 +1,4 @@
 var airports = require('./airports')
-var Promise = require('bluebird');
 var _ = require('lodash');
 
 airports = _.indexBy(airports, function(a) {
