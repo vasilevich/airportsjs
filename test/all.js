@@ -20,6 +20,12 @@ describe('all', function() {
   it('should search up an airport by name', function() {
     var rows = index.searchByAirportName('newark')
     expect(_.pluck(rows, "iata")).to.contain("EWR")
-  })
+  });
 
+  it('should match iata before name', function() {
+    var rows = index.searchByAirportName('sfo');
+    expect(rows).to.have.length.above(0);
+    var row = rows[0];
+    expect(row.iata).to.equal('SFO');
+  });
 })
