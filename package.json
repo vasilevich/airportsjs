@@ -1,6 +1,6 @@
 {
   "name": "airportsjs",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A library to help search for airports and their codes",
   "main": "index.js",
   "scripts": {
@@ -27,9 +27,9 @@
     "csvtojson": "^0.3.21",
     "mocha": "^2.2.5",
     "request": "^2.58.0",
-    "triecomplete": "0.0.1"
   },
   "dependencies": {
+    "triecomplete": "0.0.1",
     "lodash": "^3.9.3"
   }
 }
