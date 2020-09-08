@@ -29,7 +29,7 @@
     "request": "^2.58.0"
   },
   "dependencies": {
-    "triecomplete": "0.0.1",
-    "lodash": "^3.9.3"
+    "lodash": "^4.17.20",
+    "triecomplete": "0.0.1"
   }
 }
