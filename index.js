@@ -118,9 +118,17 @@ module.exports.searchByAll = function (name) {
     .sort(function (airport1, airport2) {
       return airport2.hits - airport1.hits;
     })
-    .value()
-
+    .value();
+	//make sure the array has only unique objects
+  var array = iataResults.concat(nameResults);
+  var flags = [], output = [], l = array.length, i;
+  for (i = 0; i < l; i++) {
+     if (flags[array[i].name]) continue;
+     flags[array[i].name] = true;
+     output.push(array[i]);
+  }
+  
   // have airports with matching iatas be listed before airports with names that
   // have a matching substring
-  return iataResults.concat(nameResults);
+  return output;
 }
