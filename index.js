@@ -1,7 +1,6 @@
 var airports = require('./airports')
 var _ = require('lodash');
 var Autocomplete = require('triecomplete');
-var stringSimilarity = require('string-similarity');
 
 var airportIataAutocomplete = new Autocomplete();
 airportIataAutocomplete.initialize(_.map(airports, function (a) {
