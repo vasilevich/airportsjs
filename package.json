@@ -1,7 +1,7 @@
 {
-  "name": "airportsjs",
+  "name": "airlinesjs",
   "version": "0.3.0",
-  "description": "A library to help search for airports and their codes",
+  "description": "A library to help search for airlines and their codes",
   "main": "index.js",
   "scripts": {
     "test": "mocha",
