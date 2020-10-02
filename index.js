@@ -1,4 +1,6 @@
-var airports = require('./airports')
+var airports = require('airline-codes/airlines.json')
+.filter((iata)=>(iata.length>1))
+.map((id,alias,callsign,...rest)=>(rest));
 var _ = require('lodash');
 var Autocomplete = require('triecomplete');
 
