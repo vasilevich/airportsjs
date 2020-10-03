@@ -1,20 +1,20 @@
-var airports = require('airline-codes/airlines.json')
+var airlines = require('airline-codes/airlines.json')
   .filter(({iata}) => (iata && iata.replace(/[^a-z0-9]/ig,'').length > 0))
   .map(({id, alias, callsign, ...rest}) => (rest));
 var _ = require('lodash');
 var Autocomplete = require('triecomplete');
 
 var airportIataAutocomplete = new Autocomplete();
-airportIataAutocomplete.initialize(_.map(airports, function (a) {
+airportIataAutocomplete.initialize(_.map(airlines, function (a) {
   return [a.iata.toLowerCase(), a];
 }));
 
-airports = _.keyBy(airports, function (a) {
+airlines = _.keyBy(airlines, function (a) {
   return a.iata;
 });
 
 module.exports.lookupByIataCode = function (iataCode) {
-  return airports[iataCode]
+  return airlines[iataCode]
 }
 
 module.exports.searchByAirportName = function (name) {
@@ -37,13 +37,13 @@ module.exports.searchByAirportName = function (name) {
 
   var iatas = _.map(iataResults, 'iata');
 
-  nameResults = _.chain(airports)
+  nameResults = _.chain(airlines)
     .filter(function (v) {
       return !_.includes(iatas, v.iata) && v.name.toLowerCase().indexOf(name) > -1
     })
     .value()
 
-  // have airports with matching iatas be listed before airports with names that
+  // have airlines with matching iatas be listed before airlines with names that
   // have a matching substring
   return iataResults.concat(nameResults);
 }
@@ -79,7 +79,7 @@ module.exports.searchByAll = function (name) {
     'iata',
   ];
 
-  nameResults = _.chain(airports)
+  nameResults = _.chain(airlines)
     .map(function (airport) {
       var hits = 0;
       for (var i in keysToCheck) {
@@ -130,7 +130,17 @@ module.exports.searchByAll = function (name) {
      output.push(array[i]);
   }
   
-  // have airports with matching iatas be listed before airports with names that
+  // have airlines with matching iatas be listed before airlines with names that
   // have a matching substring
   return output;
 }
+
+module.exports.removeEachItemFromList = function (criteria) {
+  if (typeof criteria === 'function') {
+    for (var airlineKey in airlines) {
+      if (criteria(airlines[airlineKey])) {
+        delete airlines[airlineKey];
+      }
+    }
+  }
+};
