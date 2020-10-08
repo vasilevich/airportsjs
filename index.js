@@ -1,51 +1,52 @@
 var airlines = require('airline-codes/airlines.json')
   .filter(({iata}) => (iata && iata.replace(/[^a-z0-9]/ig,'').length > 0))
+  .filter(({icao}) => (icao && icao.replace(/[^a-z0-9]/ig,'').length > 0))
   .map(({id, alias, callsign, ...rest}) => (rest));
 var _ = require('lodash');
 var Autocomplete = require('triecomplete');
 
-var airportIataAutocomplete = new Autocomplete();
-airportIataAutocomplete.initialize(_.map(airlines, function (a) {
-  return [a.iata.toLowerCase(), a];
+var airlineIcaoAutocomplete = new Autocomplete();
+airlineIcaoAutocomplete.initialize(_.map(airlines, function (a) {
+  return [a.icao.toLowerCase(), a];
 }));
 
 airlines = _.keyBy(airlines, function (a) {
-  return a.iata;
+  return a.icao;
 });
 
-module.exports.lookupByIataCode = function (iataCode) {
-  return airlines[iataCode]
+module.exports.lookupByicaoCode = function (icaoCode) {
+  return airlines[icaoCode]
 }
 
-module.exports.searchByAirportName = function (name) {
+module.exports.searchByAirlineName = function (name) {
   if (_.isEmpty(name)) {
     return [];
   }
 
   name = name.toLowerCase();
 
-  var iataResults = [];
+  var icaoResults = [];
   var nameResults = [];
 
   if (name.length <= 3) {
-    // searches airport by iata, using name as prefix
-    iataResults = _.chain(airportIataAutocomplete.search(name))
+    // searches airline by icao, using name as prefix
+    icaoResults = _.chain(airlineIcaoAutocomplete.search(name))
       .map('value')
-      .sortBy('iata')
+      .sortBy('icao')
       .value();
   }
 
-  var iatas = _.map(iataResults, 'iata');
+  var icaos = _.map(icaoResults, 'icao');
 
   nameResults = _.chain(airlines)
     .filter(function (v) {
-      return !_.includes(iatas, v.iata) && v.name.toLowerCase().indexOf(name) > -1
+      return !_.includes(icaos, v.icao) && v.name.toLowerCase().indexOf(name) > -1
     })
     .value()
 
-  // have airlines with matching iatas be listed before airlines with names that
+  // have airlines with matching icaos be listed before airlines with names that
   // have a matching substring
-  return iataResults.concat(nameResults);
+  return icaoResults.concat(nameResults);
 }
 
 module.exports.searchByAll = function (name) {
@@ -55,18 +56,18 @@ module.exports.searchByAll = function (name) {
 
   name = name.toLowerCase().trim();
   var nameWithNoSpecialChars = removeSpecialChars(name);
-  var iataResults = [];
+  var icaoResults = [];
   var nameResults = [];
 
   if (name.length <= 3) {
-    // searches airport by iata, using name as prefix
-    iataResults = _.chain(airportIataAutocomplete.search(name))
+    // searches airline by icao, using name as prefix
+    icaoResults = _.chain(airlineIcaoAutocomplete.search(name))
       .map('value')
-      .sortBy('iata')
+      .sortBy('icao')
       .value();
   }
 
-  var iatas = _.map(iataResults, 'iata');
+  var icaos = _.map(icaoResults, 'icao');
 
   function removeSpecialChars(str) {
     return str.replace(/-/g, " ").replace(/_/g, " ").replace(/[^\w\s]/gi, '');
@@ -76,53 +77,53 @@ module.exports.searchByAll = function (name) {
     'name',
     'city',
     'country',
-    'iata',
+    'icao',
   ];
 
   nameResults = _.chain(airlines)
-    .map(function (airport) {
+    .map(function (airline) {
       var hits = 0;
       for (var i in keysToCheck) {
-        var airportValue = airport[keysToCheck[i]];
-        if (airportValue) {
-          airportValue = airportValue.toLowerCase().trim();
-          var airportValueNoSpecialChars = removeSpecialChars(airportValue);
-          if (airportValue === name) {
+        var airlineValue = airline[keysToCheck[i]];
+        if (airlineValue) {
+          airlineValue = airlineValue.toLowerCase().trim();
+          var airlineValueNoSpecialChars = removeSpecialChars(airlineValue);
+          if (airlineValue === name) {
             hits += 1000;
-          } else if (airportValueNoSpecialChars === nameWithNoSpecialChars) {
+          } else if (airlineValueNoSpecialChars === nameWithNoSpecialChars) {
             hits += 800;
-          } else if (_.startsWith(airportValueNoSpecialChars, nameWithNoSpecialChars)
+          } else if (_.startsWith(airlineValueNoSpecialChars, nameWithNoSpecialChars)
           ) {
             hits += 750;
-          } else if (_.startsWith(nameWithNoSpecialChars, airportValueNoSpecialChars)
+          } else if (_.startsWith(nameWithNoSpecialChars, airlineValueNoSpecialChars)
           ) {
             hits += 600;
-          } else if (_.endsWith(nameWithNoSpecialChars, airportValueNoSpecialChars)
+          } else if (_.endsWith(nameWithNoSpecialChars, airlineValueNoSpecialChars)
           ) {
             hits += 500;
-          } else if (_.endsWith(airportValueNoSpecialChars, nameWithNoSpecialChars)
+          } else if (_.endsWith(airlineValueNoSpecialChars, nameWithNoSpecialChars)
           ) {
             hits += 500;
-          } else if (_.includes(nameWithNoSpecialChars, airportValueNoSpecialChars)
+          } else if (_.includes(nameWithNoSpecialChars, airlineValueNoSpecialChars)
           ) {
             hits += 300;
-          } else if (_.includes(nameWithNoSpecialChars, airportValueNoSpecialChars)) {
+          } else if (_.includes(nameWithNoSpecialChars, airlineValueNoSpecialChars)) {
             hits += 250;
           }
         }
       }
-      airport.hits = hits;
-      return airport;
+      airline.hits = hits;
+      return airline;
     })
-    .filter(function (airport) {
-      return airport.hits > 0;
+    .filter(function (airline) {
+      return airline.hits > 0;
     })
-    .sort(function (airport1, airport2) {
-      return airport2.hits - airport1.hits;
+    .sort(function (airline1, airline2) {
+      return airline2.hits - airline1.hits;
     })
     .value();
 	//make sure the array has only unique objects
-  var array = iataResults.concat(nameResults);
+  var array = icaoResults.concat(nameResults);
   var flags = [], output = [], l = array.length, i;
   for (i = 0; i < l; i++) {
      if (flags[array[i].name]) continue;
@@ -130,7 +131,7 @@ module.exports.searchByAll = function (name) {
      output.push(array[i]);
   }
   
-  // have airlines with matching iatas be listed before airlines with names that
+  // have airlines with matching icaos be listed before airlines with names that
   // have a matching substring
   return output;
 }
