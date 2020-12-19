@@ -59,14 +59,6 @@ module.exports.searchByAll = function (name) {
   var icaoResults = [];
   var nameResults = [];
 
-  if (name.length <= 3) {
-    // searches airline by icao, using name as prefix
-    icaoResults = _.chain(airlineIcaoAutocomplete.search(name))
-      .map('value')
-      .sortBy('icao')
-      .value();
-  }
-
   var icaos = _.map(icaoResults, 'icao');
 
   function removeSpecialChars(str) {
